@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  flutter-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fireriskmanagement-web
+    ports:
+      - "8081:80"
+    restart: unless-stopped

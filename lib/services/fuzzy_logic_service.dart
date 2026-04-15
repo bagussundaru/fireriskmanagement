@@ -1,5 +1,8 @@
 import 'dart:math';
 
+/// Defines the 3 Fuzzy Linguistics Sets for Risk
+enum FuzzyLinguistic { DANGER, WARNING, SAFE }
+
 /// A class representing the mathematical evaluation of Fire Risk using
 /// Hybrid AHP (Analytic Hierarchy Process) and Fuzzy Comprehensive Evaluation.
 class FuzzyLogicService {
@@ -15,8 +18,7 @@ class FuzzyLogicService {
   static const double weightC = 0.270;
   static const double weightD = 0.200;
 
-  /// Defines the 3 Fuzzy Linguistics Sets for Risk
-  enum FuzzyLinguistic { DANGER, WARNING, SAFE }
+
 
   /// Fuzzification logic using Trapezoidal/Triangular Membership Functions
   /// Converts a crisp score (0-100) into a vector of 3 fractional membership degrees
@@ -138,8 +140,8 @@ class FuzzyEvaluationResult {
   final double confidence;
   
   // Diagnostic Data for PDF / Advanced Metrics display
-  final Map<String, Map<FuzzyLogicService.FuzzyLinguistic, double>> matrixR;
-  final Map<FuzzyLogicService.FuzzyLinguistic, double> vectorB;
+  final Map<String, Map<FuzzyLinguistic, double>> matrixR;
+  final Map<FuzzyLinguistic, double> vectorB;
 
   FuzzyEvaluationResult({
     required this.fuzzyScore,
