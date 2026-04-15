@@ -1,0 +1,162 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset="utf-8"><title>Formulir Audit Fire Risk Assessment</title>
+<style>
+body { font-family: 'Calibri', sans-serif; font-size: 11pt; }
+h1 { color: #2C3E50; text-align: center; font-size: 20pt; text-transform: uppercase; margin-bottom: 5px; }
+h2 { color: #ffffff; background-color: #2980B9; padding: 6px; font-size: 14pt; margin-top: 20px; }
+h3 { color: #2C3E50; font-size: 12pt; border-left: 4px solid #F39C12; padding-left: 8px; margin-top: 15px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th, td { border: 1px solid #7F8C8D; padding: 6px; text-align: left; vertical-align: top; }
+th { background-color: #ECF0F1; font-weight: bold; text-align: center; }
+.col-no { width: 5%; text-align: center; font-weight: bold; }
+.col-text { width: 50%; }
+.col-input { width: 25%; text-align: center; }
+.col-note { width: 20%; }
+.input-box { display: inline-block; width: 15px; height: 15px; border: 1px solid #000; margin-right: 5px; vertical-align: middle; }
+.likert-scale { font-weight: bold; font-family: monospace; letter-spacing: 2px; }
+.header-table { width: 100%; border: none; margin-bottom: 20px;}
+.header-table td { border: none; padding: 4px; }
+</style>
+</head>
+<body>
+
+    <h1>FORMULIR AUDIT FIRE RISK ASSESSMENT</h1>
+    <p style="text-align:center; font-style:italic; color:#7f8c8d;">Sistem Pendukung Keputusan Berbasis Hybrid AHP-Fuzzy Logic</p>
+    <hr>
+
+    <table class="header-table">
+        <tr>
+            <td width="20%"><strong>Nama Fasilitas</strong></td><td width="30%">: ____________________</td>
+            <td width="20%"><strong>Nama Asesor</strong></td><td width="30%">: ____________________</td>
+        </tr>
+        <tr>
+            <td><strong>Tipe Fasilitas</strong></td><td>: [ ] Manufaktur &nbsp; [ ] Residensial</td>
+            <td><strong>Tanggal Audit</strong></td><td>: ____________________</td>
+        </tr>
+    </table>
+
+    <!-- KATEGORI A -->
+    <h2>KATEGORI A: LEGAL COMPLIANCE (Bobot: 15.0%)</h2>
+
+    <h3>A1. Legal Compliance</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">A1Q1</td><td>Apakah fasilitas memiliki izin lingkungan yang masih berlaku?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">A1Q2</td><td>Apakah fasilitas memiliki izin operasional yang valid?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">A1Q3</td><td>Apakah tersedia dokumentasi kepatuhan K3/Fire Safety yang lengkap?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>A2. Fire Safety Training</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">A2Q1</td><td>Apakah dilakukan simulasi pemadaman kebakaran secara berkala?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">A2Q2</td><td>Apakah ada edukasi prosedur evakuasi minimal 2x setahun?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">A2Q3</td><td>Apakah tersedia rekaman/dokumentasi simulasi tersebut?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>A3. Chemical Storage Compliance (Khusus Manufaktur)</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Skala Likert (1=Buruk, 5=Sangat Baik)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">A3Q1</td><td>Apakah penyimpanan bahan kimia sesuai standar MSDS?</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">A3Q2</td><td>Apakah tersedia label dan tanda bahaya yang jelas?</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">A3Q3</td><td>Apakah ada pemisahan bahan kimia inkompatibel?</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">A3Q4</td><td>Apakah ada secondary containment untuk bahan berbahaya?</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">A3Q5</td><td>Apakah tersedia shower darurat di area kimia?</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+    </table>
+
+    <!-- KATEGORI B -->
+    <h2 style="page-break-before: always;">KATEGORI B: FIRE PREVENTION MEASURES (Bobot: 38.0%)</h2>
+
+    <h3>B1. Flammable Chemical and Liquid (Khusus Manufaktur)</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Skala Likert (1=Buruk, 5=Sangat Baik)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">B1Q1</td><td>Kondisi penyimpanan cairan mudah terbakar (ventilasi memadai).</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">B1Q2</td><td>Sistem Exhaust/Ventilasi di area penyimpanan bahan mudah terbakar.</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">B1Q3</td><td>Jarak aman penyimpanan bahan mudah terbakar dari sumber panas.</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">B1Q4</td><td>Tersedianya grounding/bonding untuk tangki penyimpanan kimia.</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+        <tr><td class="col-no">B1Q5</td><td>Prosedur penanganan tumpahan bahan mudah terbakar.</td><td class="col-input likert-scale">1 - 2 - 3 - 4 - 5</td><td></td></tr>
+    </table>
+
+    <h3>B2. Electrical Installation and Utilities</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">B2Q1</td><td>Apakah instalasi listrik sesuai standar SNI/PUIL yang berlaku?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B2Q2</td><td>Apakah dilakukan inspeksi instalasi listrik secara berkala oleh teknisi/PLN?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B2Q3</td><td>Apakah panel listrik mudah diakses dan tertutup aman?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B2Q4</td><td>Apakah ada sistem grounding yang memadai untuk instalasi utama?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B2Q5</td><td>Apakah kabel-kabel tertata rapi dan tidak ada yang terkelupas?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B2Q6</td><td>Apakah tersedia MCB tersendiri per zona/area?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>B3. Electrical Safety Compliance</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">B3Q1</td><td>Apakah semua peralatan utama listrik memiliki sertifikasi keamanan (SNI)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B3Q2</td><td>Apakah menghindari penggunaan sambungan T berlebihan (Overload)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B3Q3</td><td>Apakah tersedia MCB khusus pencegah kebocoran arus (ELCB/RCBO)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>B4. Building Fire Resistance</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">B4Q1</td><td>Apakah dinding utama pemisah terbangun dari bata/beton non-combustible?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B4Q2</td><td>Apakah material atap tidak menggunakan bahan yang cepat merambatkan api?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B4Q3</td><td>Apakah jalur kabel/pipa antar lantai memiliki sumbatan rapat (fire seal)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B4Q4</td><td>Apakah jarak antar bangunan/gudang memenuhi standar fire separation? *(Hanya Manufaktur)</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">B4Q5</td><td>Apakah area dapur (kitchen) menggunakan material yang tidak mudah terbakar di kabinet sekitarnya?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <!-- KATEGORI C -->
+    <h2 style="page-break-before: always;">KATEGORI C: FIRE PROTECTION SYSTEM (Bobot: 27.0%)</h2>
+
+    <h3>C1. Water Based Protection</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">C1Q1</td><td>Apakah tersedia hydrant pilar/gedung dengan tekanan air memadai? *(Hanya Manufaktur)</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C1Q2</td><td>Apakah ada fire pump (Jockey, Electric, Diesel) yang rutin diuji? *(Hanya Manufaktur)</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C1Q3</td><td>Apakah sistem sprinkler berfungsi dan diinspeksi secara rutin?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>C2. Portable Fire Extinguisher (APAR)</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">C2Q1</td><td>Apakah APAR tersedia di setiap lantai atau jangkauan maksimal 15-20 meter?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C2Q2</td><td>Apakah APAR diinspeksi tekanan dan fisiknya secara rutin (min 6 bulan sekali)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C2Q3</td><td>Apakah jenis APAR sesuai dengan risikonya (khusus dapur beda dengan area listrik)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C2Q4</td><td>Apakah diletakkan mudah diakses, terlihat jelas, tidak dipindah sembarangan?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>C3. Detection System</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">C3Q1</td><td>Apakah tersedia smoke detector di kamar tidur / ruang arsip / gudang tertutup?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C3Q2</td><td>Apakah tersedia heat detector di ruang memasak (Dapur) / mesin panas?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">C3Q3</td><td>Apakah fire alarm merespon dengan bunyi sirene (lonceng/horn) yang keras?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <!-- KATEGORI D -->
+    <h2 style="page-break-before: always;">KATEGORI D: EVACUATION & EMERGENCY PREPAREDNESS (Bobot: 20.0%)</h2>
+
+    <h3>D1. Emergency Planning</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">D1Q1</td><td>Apakah titik kumpul (Assembly Point) ditentukan dan disosialisasikan?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D1Q2</td><td>Apakah tersedia denah/peta rute evakuasi di koridor bangunan?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D1Q3</td><td>Apakah nomor telepon pemadam kebakaran ditempel secara permanen di titik mudah terlihat?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D1Q4</td><td>Apakah kotak P3K (First Aid Kit) tersedia dengan isi memadai?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <h3>D2. Exit Access and Signage</h3>
+    <table>
+        <tr><th class="col-no">Kode</th><th class="col-text">Item Pemeriksaan</th><th class="col-input">Klasifikasi (Ya/Tidak)</th><th class="col-note">Catatan Asesor</th></tr>
+        <tr><td class="col-no">D2Q1</td><td>Apakah tanda jalur evakuasi (EXIT) terlihat menyala dengan baik meskipun lampu padam (fosfor/listrik)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D2Q2</td><td>Apakah koridor evakuasi / selasar tidak terhalang barang rongsok/furnitur?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D2Q3</td><td>Apakah pintu utama / pintu darurat dapat dibuka langsung dari dalam tanpa butuh kunci khusus saat panik?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D2Q4</td><td>Apakah tangga tidak licin dan dilengkapi ruji pegangan tangan (handrail)?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+        <tr><td class="col-no">D2Q5</td><td>Apakah area luar gedung untuk akses unit truk pemadam bisa dilalui tanpa hambatan permanen?</td><td class="col-input"><span class="input-box"></span>YA &nbsp;&nbsp; <span class="input-box"></span>TIDAK</td><td></td></tr>
+    </table>
+
+    <br><hr>
+    <p style="text-align:right; font-size:9pt; font-style:italic;">*Dokumen dihasilkan oleh Sistem Algoritma Fire Risk Assessment</p>
+</body>
+</html>
