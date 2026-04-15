@@ -11,7 +11,7 @@ import 'scoring_service.dart';
 class PdfService {
   static Future<Uint8List> generateReport(Assessment assessment) async {
     final pdf = pw.Document();
-    final categories = AssessmentData.getCategories();
+    final categories = AssessmentData.getCategories(industryType: assessment.factoryInfo.industryType);
 
     // Header colors
     final headerColor = PdfColor.fromHex('#FFD700'); // Gold

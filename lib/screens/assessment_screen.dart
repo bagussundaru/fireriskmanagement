@@ -94,9 +94,8 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   Future<void> _submitAssessment() async {
-    final type = widget.factoryInfo.factoryType;
-    final totalScore = ScoringService.calculateTotalScore(type, _answers);
-    final riskLevel = ScoringService.getRiskLevel(type, _answers);
+    final totalScore = ScoringService.calculateTotalScore(_answers, industryType: widget.factoryInfo.industryType);
+    final riskLevel = ScoringService.getRiskLevel(_answers, industryType: widget.factoryInfo.industryType);
     final categoryScores = ScoringService.getCategoryScores(_answers, industryType: widget.factoryInfo.industryType);
 
     final assessment = Assessment(

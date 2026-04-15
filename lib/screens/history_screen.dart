@@ -97,7 +97,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // Helper to generate mock answers if missing
     Map<String, Answer> generateMockAnswers(double score) {
       final answers = <String, Answer>{};
-      final categories = AssessmentData.getCategories();
+      final categories = AssessmentData.getCategories(industryType: IndustryType.manufacturing);
       
       for (var cat in categories) {
         for (var sub in cat.subCategories) {
@@ -116,6 +116,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       factoryInfo: FactoryInfo(
         factoryName: data['factory_name'] ?? 'Unknown Factory',
         factoryType: data['factory_type'] ?? 'General Manufacturing',
+        industryType: IndustryType.manufacturing,
         workerCount: data['worker_count'] ?? '100-500 workers',
         assessorName: data['assessor_name'] ?? 'Assessor',
         gmDirector: data['gm_director'] ?? 'Director',
