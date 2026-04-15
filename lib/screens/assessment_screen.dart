@@ -30,7 +30,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   @override
   void initState() {
     super.initState();
-    _categories = AssessmentData.getCategories(widget.factoryInfo.factoryType);
+    _categories = AssessmentData.getCategories(industryType: widget.factoryInfo.industryType);
     _assessmentId = widget.draftId ?? DateTime.now().millisecondsSinceEpoch.toString();
     _loadDraft();
   }
@@ -60,7 +60,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     await LocalStorageService.saveDraft(draft);
   }
 
-  int get _totalQuestions => AssessmentData.getTotalQuestions(widget.factoryInfo.factoryType);
+  int get _totalQuestions => AssessmentData.getTotalQuestions(industryType: widget.factoryInfo.industryType);
   int get _answeredQuestions => _answers.length;
   double get _progress => _answeredQuestions / _totalQuestions;
 
@@ -97,7 +97,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     final type = widget.factoryInfo.factoryType;
     final totalScore = ScoringService.calculateTotalScore(type, _answers);
     final riskLevel = ScoringService.getRiskLevel(type, _answers);
-    final categoryScores = ScoringService.getCategoryScores(type, _answers);
+    final categoryScores = ScoringService.getCategoryScores(_answers, industryType: widget.factoryInfo.industryType);
 
     final assessment = Assessment(
       id: _assessmentId,
@@ -338,7 +338,7 @@ class _QuestionCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          if (question.type == QuestionType.boolean)
+          if (question.type == QuestionType.binary)
             Row(
               children: [
                 Expanded(
@@ -360,10 +360,22 @@ class _QuestionCard extends StatelessWidget {
                 ),
               ],
             )
+          else if (question.type == QuestionType.multiChoice)
+            _MultiChoiceOptions(
+              question: question,
+              currentValue: answer?.likertValue,
+              onChanged: (idx) {
+                final opts = question.options ?? [];
+                final isCompliant = idx >= (opts.length ~/ 2);
+                onAnswer(isCompliant, idx);
+              },
+            )
           else
             _LikertScale(
                currentValue: answer?.likertValue,
-               onChanged: (val) => onAnswer(val >= 3, val),
+               lowLabel: question.likertLow ?? 'Sangat Buruk',
+               highLabel: question.likertHigh ?? 'Sangat Baik',
+               onChanged: (val) => onAnswer(val >= 2, val),
             ),
         ],
       ),
@@ -374,52 +386,69 @@ class _QuestionCard extends StatelessWidget {
 class _LikertScale extends StatelessWidget {
   final int? currentValue;
   final Function(int) onChanged;
+  final String lowLabel;
+  final String highLabel;
 
-  const _LikertScale({this.currentValue, required this.onChanged});
+  const _LikertScale({
+    this.currentValue,
+    required this.onChanged,
+    this.lowLabel = 'Sangat Buruk',
+    this.highLabel = 'Sangat Baik',
+  });
+
+  static const _colors = [
+    AppTheme.riskHigh,
+    Color(0xFFFF6B35),
+    AppTheme.riskMedium,
+    Color(0xFF7DC97D),
+    AppTheme.riskLow,
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-         Row(
-           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           children: List.generate(5, (index) {
-             int val = index + 1;
-             bool isSelected = currentValue == val;
-             return GestureDetector(
-               onTap: () => onChanged(val),
-               child: Container(
-                 width: 45,
-                 height: 45,
-                 decoration: BoxDecoration(
-                   shape: BoxShape.circle,
-                   color: isSelected ? AppTheme.goldPrimary : AppTheme.surfaceLight,
-                   border: Border.all(
-                      color: isSelected ? AppTheme.goldPrimary : AppTheme.surfaceLight,
-                      width: 2,
-                   ),
-                 ),
-                 alignment: Alignment.center,
-                 child: Text(
-                   val.toString(),
-                   style: TextStyle(
-                     color: isSelected ? Colors.white : AppTheme.textSecondary,
-                     fontWeight: FontWeight.bold,
-                     fontSize: 16,
-                   ),
-                 ),
-               ),
-             );
-           }),
-         ),
-         const SizedBox(height: 8),
-         const Row(
-           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           children: [
-             Text('Buruk', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
-             Text('Sangat Baik', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
-           ],
-         ),
+        Row(
+          children: List.generate(5, (index) {
+            final bool isSelected = currentValue == index;
+            final color = _colors[index];
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => onChanged(index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: EdgeInsets.only(right: index < 4 ? 6 : 0),
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: isSelected ? color.withValues(alpha: 0.25) : AppTheme.surfaceLight.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected ? color : AppTheme.surfaceLight,
+                      width: isSelected ? 2 : 1,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    index.toString(),
+                    style: TextStyle(
+                      color: isSelected ? color : AppTheme.textSecondary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(child: Text(lowLabel, style: const TextStyle(fontSize: 10, color: AppTheme.riskHigh))),
+            Expanded(child: Text(highLabel, textAlign: TextAlign.right, style: const TextStyle(fontSize: 10, color: AppTheme.riskLow))),
+          ],
+        ),
       ],
     );
   }
@@ -476,3 +505,94 @@ class _AnswerButton extends StatelessWidget {
     );
   }
 }
+
+// ── Multi-Choice Options Widget ──────────────────────────────────────────────
+class _MultiChoiceOptions extends StatelessWidget {
+  final Question question;
+  final int? currentValue;
+  final Function(int) onChanged;
+
+  const _MultiChoiceOptions({
+    required this.question,
+    this.currentValue,
+    required this.onChanged,
+  });
+
+  Color _optColor(int idx, int total) {
+    final t = idx / (total - 1);
+    if (t < 0.34) return AppTheme.riskHigh;
+    if (t < 0.67) return AppTheme.riskMedium;
+    return AppTheme.riskLow;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final options = question.options ?? [];
+    return Column(
+      children: options.asMap().entries.map((e) {
+        final idx = e.key;
+        final label = e.value;
+        final isSelected = currentValue == idx;
+        final color = _optColor(idx, options.isEmpty ? 1 : options.length);
+        return GestureDetector(
+          onTap: () => onChanged(idx),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? color.withValues(alpha: 0.15)
+                  : AppTheme.surfaceLight.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isSelected ? color : AppTheme.surfaceLight,
+                width: isSelected ? 1.5 : 0.5,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 26, height: 26,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? color.withValues(alpha: 0.3)
+                        : AppTheme.surfaceLight.withValues(alpha: 0.5),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: isSelected ? color : AppTheme.textSecondary,
+                        width: isSelected ? 1.5 : 0.5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      String.fromCharCode(65 + idx),
+                      style: TextStyle(
+                          color: isSelected ? color : AppTheme.textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(label,
+                      style: TextStyle(
+                          color: isSelected
+                              ? AppTheme.textPrimary
+                              : AppTheme.textSecondary,
+                          fontSize: 12,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.normal)),
+                ),
+                if (isSelected)
+                  Icon(Icons.check_circle_rounded, color: color, size: 18),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+

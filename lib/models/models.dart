@@ -1,6 +1,22 @@
+// ─── Question Types ────────────────────────────────────────────────────────
+enum QuestionType { binary, likert, multiChoice }
+
+// ─── Industry Types ────────────────────────────────────────────────────────
+enum IndustryType {
+  manufacturing('Manufacturing / Industri', 'Pabrik/Industri dengan proses produksi'),
+  residential('Residential / Hunian', 'Gedung hunian, apartemen, perumahan'),
+  commercial('Commercial / Komersial', 'Perkantoran, mal, hotel'),
+  mixed('Mixed Use', 'Campuran hunian dan komersial');
+
+  final String label;
+  final String description;
+  const IndustryType(this.label, this.description);
+}
+
 class FactoryInfo {
   final String factoryName;
   final String factoryType;
+  final IndustryType industryType;
   final String workerCount;
   final String assessorName;
   final String gmDirector;
@@ -9,6 +25,7 @@ class FactoryInfo {
   FactoryInfo({
     required this.factoryName,
     required this.factoryType,
+    required this.industryType,
     required this.workerCount,
     required this.assessorName,
     required this.gmDirector,
@@ -18,6 +35,7 @@ class FactoryInfo {
   Map<String, dynamic> toJson() => {
     'factoryName': factoryName,
     'factoryType': factoryType,
+    'industryType': industryType.name,
     'workerCount': workerCount,
     'assessorName': assessorName,
     'gmDirector': gmDirector,
@@ -27,12 +45,16 @@ class FactoryInfo {
   factory FactoryInfo.fromJson(Map<String, dynamic> json) => FactoryInfo(
     factoryName: json['factoryName'] ?? '',
     factoryType: json['factoryType'] ?? '',
+    industryType: IndustryType.values.firstWhere(
+      (e) => e.name == (json['industryType'] ?? 'manufacturing'),
+      orElse: () => IndustryType.manufacturing,
+    ),
     workerCount: json['workerCount'] ?? '',
     assessorName: json['assessorName'] ?? '',
     gmDirector: json['gmDirector'] ?? '',
-    assessmentDate: json['assessmentDate'] != null 
-      ? DateTime.parse(json['assessmentDate']) 
-      : DateTime.now(),
+    assessmentDate: json['assessmentDate'] != null
+        ? DateTime.parse(json['assessmentDate'])
+        : DateTime.now(),
   );
 }
 
@@ -66,22 +88,23 @@ class SubCategory {
   });
 }
 
-enum QuestionType {
-  boolean,
-  likert
-}
-
 class Question {
   final String id;
   final String text;
   final double weight;
   final QuestionType type;
+  final List<String>? options;
+  final String? likertLow;
+  final String? likertHigh;
 
   Question({
     required this.id,
     required this.text,
     this.weight = 1.0,
-    this.type = QuestionType.boolean,
+    this.type = QuestionType.binary,
+    this.options,
+    this.likertLow,
+    this.likertHigh,
   });
 }
 
@@ -97,6 +120,19 @@ class Answer {
     this.likertValue,
     this.notes,
   });
+
+  double scoreFor(Question question) {
+    switch (question.type) {
+      case QuestionType.binary:
+        return isCompliant ? 1.0 : 0.0;
+      case QuestionType.likert:
+        return (likertValue ?? 0) / 4.0;
+      case QuestionType.multiChoice:
+        final opts = question.options;
+        if (opts == null || opts.isEmpty) return isCompliant ? 1.0 : 0.0;
+        return (likertValue ?? 0) / (opts.length - 1).toDouble();
+    }
+  }
 
   Map<String, dynamic> toJson() => {
     'questionId': questionId,
@@ -160,11 +196,12 @@ class Assessment {
     totalScore: (json['totalScore'] ?? 0).toDouble(),
     riskLevel: json['riskLevel'] ?? 'HIGH',
     categoryScores: (json['categoryScores'] as Map<String, dynamic>?)?.map(
-      (k, v) => MapEntry(k, (v as num).toDouble()),
-    ) ?? {},
+          (k, v) => MapEntry(k, (v as num).toDouble()),
+        ) ??
+        {},
     isCompleted: json['isCompleted'] ?? false,
-    createdAt: json['createdAt'] != null 
-      ? DateTime.parse(json['createdAt']) 
-      : DateTime.now(),
+    createdAt: json['createdAt'] != null
+        ? DateTime.parse(json['createdAt'])
+        : DateTime.now(),
   );
 }

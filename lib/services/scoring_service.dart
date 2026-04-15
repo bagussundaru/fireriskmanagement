@@ -4,121 +4,106 @@ import 'fuzzy_logic_service.dart';
 
 class ScoringService {
   static double calculateCategoryScore(
-    Category category, 
+    Category category,
     Map<String, Answer> answers,
   ) {
-    int totalQuestions = 0;
-    double accumulatedPoints = 0;
-    
-    for (var subCategory in category.subCategories) {
-      for (var question in subCategory.questions) {
-        totalQuestions++;
+    double totalWeight = 0;
+    double weightedScore = 0;
+
+    for (var sub in category.subCategories) {
+      for (var question in sub.questions) {
+        totalWeight += question.weight;
         final answer = answers[question.id];
         if (answer != null) {
-          if (question.type == QuestionType.likert) {
-            final lValue = answer.likertValue ?? 1;
-            accumulatedPoints += (lValue / 5.0);
-          } else {
-            if (answer.isCompliant) {
-              accumulatedPoints += 1.0;
-            }
-          }
+          weightedScore += answer.scoreFor(question) * question.weight;
         }
       }
     }
-    
-    if (totalQuestions == 0) return 0;
-    return (accumulatedPoints / totalQuestions) * 100;
+
+    if (totalWeight == 0) return 0;
+    return (weightedScore / totalWeight) * 100;
   }
 
   static double calculateSubCategoryScore(
     SubCategory subCategory,
     Map<String, Answer> answers,
   ) {
-    int totalQuestions = subCategory.questions.length;
-    double accumulatedPoints = 0;
-    
+    double totalWeight = 0;
+    double weightedScore = 0;
+
     for (var question in subCategory.questions) {
+      totalWeight += question.weight;
       final answer = answers[question.id];
       if (answer != null) {
-        if (question.type == QuestionType.likert) {
-          final lValue = answer.likertValue ?? 1;
-          accumulatedPoints += (lValue / 5.0);
-        } else {
-          if (answer.isCompliant) {
-            accumulatedPoints += 1.0;
-          }
-        }
+        weightedScore += answer.scoreFor(question) * question.weight;
       }
     }
-    
-    if (totalQuestions == 0) return 0;
-    return (accumulatedPoints / totalQuestions) * 100;
+
+    if (totalWeight == 0) return 0;
+    return (weightedScore / totalWeight) * 100;
   }
 
-  static double calculateTotalScore(String factoryType, Map<String, Answer> answers) {
-    final scores = getCategoryScores(factoryType, answers);
-    
-    // Fuzzy AHP Process
+  static double calculateTotalScore(
+    Map<String, Answer> answers, {
+    IndustryType industryType = IndustryType.manufacturing,
+  }) {
+    final scores = getCategoryScores(answers, industryType: industryType);
     final fuzzyResult = FuzzyLogicService.evaluate(
       scores['A'] ?? 0,
       scores['B'] ?? 0,
       scores['C'] ?? 0,
       scores['D'] ?? 0,
     );
-    
     return fuzzyResult.fuzzyScore;
   }
 
-  static String getRiskLevel(String factoryType, Map<String, Answer> answers) {
-    final scores = getCategoryScores(factoryType, answers);
-    
-    // Fuzzy AHP Process
+  static String getRiskLevel(
+    Map<String, Answer> answers, {
+    IndustryType industryType = IndustryType.manufacturing,
+  }) {
+    final scores = getCategoryScores(answers, industryType: industryType);
     final fuzzyResult = FuzzyLogicService.evaluate(
       scores['A'] ?? 0,
       scores['B'] ?? 0,
       scores['C'] ?? 0,
       scores['D'] ?? 0,
     );
-    
     return fuzzyResult.riskLevel;
   }
 
-  static Map<String, double> getCategoryScores(String factoryType, Map<String, Answer> answers) {
-    final categories = AssessmentData.getCategories(factoryType);
+  static Map<String, double> getCategoryScores(
+    Map<String, Answer> answers, {
+    IndustryType industryType = IndustryType.manufacturing,
+  }) {
+    final categories = AssessmentData.getCategories(industryType: industryType);
     Map<String, double> scores = {};
-    
     for (var category in categories) {
       scores[category.id] = calculateCategoryScore(category, answers);
     }
-    
     return scores;
   }
 
-  static int getAnsweredCount(Map<String, Answer> answers) {
-    return answers.length;
-  }
+  static int getAnsweredCount(Map<String, Answer> answers) => answers.length;
 
   static int getCategoryAnsweredCount(
-    Category category, 
+    Category category,
     Map<String, Answer> answers,
   ) {
     int count = 0;
-    for (var subCategory in category.subCategories) {
-      for (var question in subCategory.questions) {
-        if (answers.containsKey(question.id)) {
-          count++;
-        }
+    for (var sub in category.subCategories) {
+      for (var question in sub.questions) {
+        if (answers.containsKey(question.id)) count++;
       }
     }
     return count;
   }
 
-  static String getRecommendation(double score, Map<String, double> categoryScores) {
+  static String getRecommendation(
+      double score, Map<String, double> categoryScores) {
     if (score >= 80) {
-      return 'The assessment indicates good fire safety compliance. Continue maintaining current standards and conduct regular inspections.';
+      return 'Hasil asesmen menunjukkan kepatuhan keselamatan kebakaran yang baik. '
+          'Pertahankan standar yang ada dan lakukan inspeksi rutin secara berkala.';
     } else if (score >= 60) {
-      // Find lowest category
       String lowestCategory = '';
       double lowestScore = 100;
       categoryScores.forEach((key, value) {
@@ -127,10 +112,12 @@ class ScoringService {
           lowestCategory = key;
         }
       });
-      
-      return 'The assessment indicates moderate fire safety issues. Focus improvement efforts on Category $lowestCategory which scored lowest at ${lowestScore.toStringAsFixed(1)}%. Schedule follow-up assessment within 3 months.';
+      return 'Asesmen menunjukkan adanya kekurangan pada tingkat sedang. '
+          'Fokuskan perbaikan pada Kategori $lowestCategory yang mendapat skor terendah '
+          '(${lowestScore.toStringAsFixed(1)}%). Jadwalkan re-assessment dalam 3 bulan.';
     } else {
-      return 'The assessment indicates critical fire safety issues that require immediate attention. Focus improvement efforts on the areas which scored lowest in this assessment. Implement critical corrections immediately and schedule follow-up assessment within 2 months.';
+      return 'Asesmen menunjukkan permasalahan kritis yang memerlukan tindakan segera. '
+          'Lakukan koreksi darurat pada area dengan skor terendah dan jadwalkan re-assessment dalam 2 bulan.';
     }
   }
 }
