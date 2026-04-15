@@ -66,38 +66,49 @@ class SubCategory {
   });
 }
 
+enum QuestionType {
+  boolean,
+  likert
+}
+
 class Question {
   final String id;
   final String text;
   final double weight;
+  final QuestionType type;
 
   Question({
     required this.id,
     required this.text,
     this.weight = 1.0,
+    this.type = QuestionType.boolean,
   });
 }
 
 class Answer {
   final String questionId;
   final bool isCompliant;
+  final int? likertValue;
   final String? notes;
 
   Answer({
     required this.questionId,
     required this.isCompliant,
+    this.likertValue,
     this.notes,
   });
 
   Map<String, dynamic> toJson() => {
     'questionId': questionId,
     'isCompliant': isCompliant,
+    'likertValue': likertValue,
     'notes': notes,
   };
 
   factory Answer.fromJson(Map<String, dynamic> json) => Answer(
     questionId: json['questionId'],
-    isCompliant: json['isCompliant'],
+    isCompliant: json['isCompliant'] ?? false,
+    likertValue: json['likertValue'],
     notes: json['notes'],
   );
 }

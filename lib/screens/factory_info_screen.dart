@@ -14,9 +14,15 @@ class FactoryInfoScreen extends StatefulWidget {
 class _FactoryInfoScreenState extends State<FactoryInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final _factoryNameController = TextEditingController();
-  final _factoryTypeController = TextEditingController();
   final _assessorController = TextEditingController();
   final _gmDirectorController = TextEditingController();
+  
+  String _factoryType = 'Manufacturing';
+  final List<String> _factoryTypeOptions = [
+    'Manufacturing',
+    'Residential',
+  ];
+
   String _workerCount = '< 100 workers';
 
   final List<String> _workerCountOptions = [
@@ -29,7 +35,6 @@ class _FactoryInfoScreenState extends State<FactoryInfoScreen> {
   @override
   void dispose() {
     _factoryNameController.dispose();
-    _factoryTypeController.dispose();
     _assessorController.dispose();
     _gmDirectorController.dispose();
     super.dispose();
@@ -39,7 +44,7 @@ class _FactoryInfoScreenState extends State<FactoryInfoScreen> {
     if (_formKey.currentState!.validate()) {
       final factoryInfo = FactoryInfo(
         factoryName: _factoryNameController.text,
-        factoryType: _factoryTypeController.text,
+        factoryType: _factoryType,
         workerCount: _workerCount,
         assessorName: _assessorController.text,
         gmDirector: _gmDirectorController.text,
@@ -124,19 +129,24 @@ class _FactoryInfoScreenState extends State<FactoryInfoScreen> {
               const SizedBox(height: 16),
 
               // Factory Type
-              TextFormField(
-                controller: _factoryTypeController,
+              DropdownButtonFormField<String>(
+                value: _factoryType,
+                dropdownColor: AppTheme.surfaceDark,
                 style: const TextStyle(color: AppTheme.textPrimary),
                 decoration: const InputDecoration(
-                  labelText: 'Factory Type *',
-                  hintText: 'e.g., Pharmaceutical, Manufacturing',
+                  labelText: 'Facility Type *',
                   prefixIcon: Icon(Icons.category, color: AppTheme.goldPrimary),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter factory type';
-                  }
-                  return null;
+                items: _factoryTypeOptions.map((type) {
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(type),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _factoryType = value!;
+                  });
                 },
               ),
               const SizedBox(height: 16),

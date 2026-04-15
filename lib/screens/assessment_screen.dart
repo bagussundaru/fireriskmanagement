@@ -30,7 +30,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   @override
   void initState() {
     super.initState();
-    _categories = AssessmentData.getCategories();
+    _categories = AssessmentData.getCategories(widget.factoryInfo.factoryType);
     _assessmentId = widget.draftId ?? DateTime.now().millisecondsSinceEpoch.toString();
     _loadDraft();
   }
@@ -60,17 +60,18 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     await LocalStorageService.saveDraft(draft);
   }
 
-  int get _totalQuestions => AssessmentData.getTotalQuestions();
+  int get _totalQuestions => AssessmentData.getTotalQuestions(widget.factoryInfo.factoryType);
   int get _answeredQuestions => _answers.length;
   double get _progress => _answeredQuestions / _totalQuestions;
 
   Category get _currentCategory => _categories[_currentCategoryIndex];
 
-  void _setAnswer(String questionId, bool isCompliant) {
+  void _setAnswer(String questionId, bool isCompliant, [int? likertValue]) {
     setState(() {
       _answers[questionId] = Answer(
         questionId: questionId,
         isCompliant: isCompliant,
+        likertValue: likertValue,
       );
     });
     _saveDraft();
@@ -93,9 +94,10 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   Future<void> _submitAssessment() async {
-    final totalScore = ScoringService.calculateTotalScore(_answers);
-    final riskLevel = ScoringService.getRiskLevel(_answers);
-    final categoryScores = ScoringService.getCategoryScores(_answers);
+    final type = widget.factoryInfo.factoryType;
+    final totalScore = ScoringService.calculateTotalScore(type, _answers);
+    final riskLevel = ScoringService.getRiskLevel(type, _answers);
+    final categoryScores = ScoringService.getCategoryScores(type, _answers);
 
     final assessment = Assessment(
       id: _assessmentId,
@@ -223,7 +225,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
                       return _QuestionCard(
                         question: question,
                         answer: answer,
-                        onAnswer: (isCompliant) => _setAnswer(question.id, isCompliant),
+                        onAnswer: (isCompliant, likertValue) => _setAnswer(question.id, isCompliant, likertValue),
                       );
                     }),
                   ],
@@ -280,7 +282,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
 class _QuestionCard extends StatelessWidget {
   final Question question;
   final Answer? answer;
-  final Function(bool) onAnswer;
+  final Function(bool, int?) onAnswer;
 
   const _QuestionCard({
     required this.question,
@@ -290,52 +292,135 @@ class _QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isAnswered = answer != null;
+    Color borderColor = AppTheme.surfaceLight;
+    if (isAnswered) {
+      if (question.type == QuestionType.likert) {
+         borderColor = AppTheme.goldPrimary.withValues(alpha: 0.5);
+      } else {
+         borderColor = (answer!.isCompliant ? AppTheme.riskLow : AppTheme.riskHigh).withValues(alpha: 0.5);
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.surfaceDark,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: answer != null
-              ? (answer!.isCompliant ? AppTheme.riskLow : AppTheme.riskHigh).withValues(alpha: 0.5)
-              : AppTheme.surfaceLight,
-        ),
+        border: Border.all(color: borderColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            question.text,
-            style: const TextStyle(
-              color: AppTheme.textPrimary,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 12),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _AnswerButton(
-                  label: 'Comply',
-                  isSelected: answer?.isCompliant == true,
-                  isPositive: true,
-                  onTap: () => onAnswer(true),
+              if (question.type == QuestionType.likert)
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppTheme.goldPrimary.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text('LIKERT', style: TextStyle(fontSize: 10, color: AppTheme.goldPrimary, fontWeight: FontWeight.bold)),
                 ),
-              ),
-              const SizedBox(width: 12),
               Expanded(
-                child: _AnswerButton(
-                  label: 'Not Comply',
-                  isSelected: answer?.isCompliant == false,
-                  isPositive: false,
-                  onTap: () => onAnswer(false),
+                child: Text(
+                  question.text,
+                  style: const TextStyle(
+                    color: AppTheme.textPrimary,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          if (question.type == QuestionType.boolean)
+            Row(
+              children: [
+                Expanded(
+                  child: _AnswerButton(
+                    label: 'Comply',
+                    isSelected: answer?.isCompliant == true,
+                    isPositive: true,
+                    onTap: () => onAnswer(true, null),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _AnswerButton(
+                    label: 'Not Comply',
+                    isSelected: answer?.isCompliant == false,
+                    isPositive: false,
+                    onTap: () => onAnswer(false, null),
+                  ),
+                ),
+              ],
+            )
+          else
+            _LikertScale(
+               currentValue: answer?.likertValue,
+               onChanged: (val) => onAnswer(val >= 3, val),
+            ),
         ],
       ),
+    );
+  }
+}
+
+class _LikertScale extends StatelessWidget {
+  final int? currentValue;
+  final Function(int) onChanged;
+
+  const _LikertScale({this.currentValue, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+         Row(
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           children: List.generate(5, (index) {
+             int val = index + 1;
+             bool isSelected = currentValue == val;
+             return GestureDetector(
+               onTap: () => onChanged(val),
+               child: Container(
+                 width: 45,
+                 height: 45,
+                 decoration: BoxDecoration(
+                   shape: BoxShape.circle,
+                   color: isSelected ? AppTheme.goldPrimary : AppTheme.surfaceLight,
+                   border: Border.all(
+                      color: isSelected ? AppTheme.goldPrimary : AppTheme.surfaceLight,
+                      width: 2,
+                   ),
+                 ),
+                 alignment: Alignment.center,
+                 child: Text(
+                   val.toString(),
+                   style: TextStyle(
+                     color: isSelected ? Colors.white : AppTheme.textSecondary,
+                     fontWeight: FontWeight.bold,
+                     fontSize: 16,
+                   ),
+                 ),
+               ),
+             );
+           }),
+         ),
+         const SizedBox(height: 8),
+         const Row(
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           children: [
+             Text('Buruk', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
+             Text('Sangat Baik', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
+           ],
+         ),
+      ],
     );
   }
 }

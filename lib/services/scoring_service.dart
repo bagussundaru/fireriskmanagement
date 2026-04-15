@@ -8,20 +8,27 @@ class ScoringService {
     Map<String, Answer> answers,
   ) {
     int totalQuestions = 0;
-    int compliantQuestions = 0;
+    double accumulatedPoints = 0;
     
     for (var subCategory in category.subCategories) {
       for (var question in subCategory.questions) {
         totalQuestions++;
         final answer = answers[question.id];
-        if (answer != null && answer.isCompliant) {
-          compliantQuestions++;
+        if (answer != null) {
+          if (question.type == QuestionType.likert) {
+            final lValue = answer.likertValue ?? 1;
+            accumulatedPoints += (lValue / 5.0);
+          } else {
+            if (answer.isCompliant) {
+              accumulatedPoints += 1.0;
+            }
+          }
         }
       }
     }
     
     if (totalQuestions == 0) return 0;
-    return (compliantQuestions / totalQuestions) * 100;
+    return (accumulatedPoints / totalQuestions) * 100;
   }
 
   static double calculateSubCategoryScore(
@@ -29,21 +36,28 @@ class ScoringService {
     Map<String, Answer> answers,
   ) {
     int totalQuestions = subCategory.questions.length;
-    int compliantQuestions = 0;
+    double accumulatedPoints = 0;
     
     for (var question in subCategory.questions) {
       final answer = answers[question.id];
-      if (answer != null && answer.isCompliant) {
-        compliantQuestions++;
+      if (answer != null) {
+        if (question.type == QuestionType.likert) {
+          final lValue = answer.likertValue ?? 1;
+          accumulatedPoints += (lValue / 5.0);
+        } else {
+          if (answer.isCompliant) {
+            accumulatedPoints += 1.0;
+          }
+        }
       }
     }
     
     if (totalQuestions == 0) return 0;
-    return (compliantQuestions / totalQuestions) * 100;
+    return (accumulatedPoints / totalQuestions) * 100;
   }
 
-  static double calculateTotalScore(Map<String, Answer> answers) {
-    final scores = getCategoryScores(answers);
+  static double calculateTotalScore(String factoryType, Map<String, Answer> answers) {
+    final scores = getCategoryScores(factoryType, answers);
     
     // Fuzzy AHP Process
     final fuzzyResult = FuzzyLogicService.evaluate(
@@ -56,8 +70,8 @@ class ScoringService {
     return fuzzyResult.fuzzyScore;
   }
 
-  static String getRiskLevel(Map<String, Answer> answers) {
-    final scores = getCategoryScores(answers);
+  static String getRiskLevel(String factoryType, Map<String, Answer> answers) {
+    final scores = getCategoryScores(factoryType, answers);
     
     // Fuzzy AHP Process
     final fuzzyResult = FuzzyLogicService.evaluate(
@@ -70,8 +84,8 @@ class ScoringService {
     return fuzzyResult.riskLevel;
   }
 
-  static Map<String, double> getCategoryScores(Map<String, Answer> answers) {
-    final categories = AssessmentData.getCategories();
+  static Map<String, double> getCategoryScores(String factoryType, Map<String, Answer> answers) {
+    final categories = AssessmentData.getCategories(factoryType);
     Map<String, double> scores = {};
     
     for (var category in categories) {

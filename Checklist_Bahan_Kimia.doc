@@ -1,0 +1,57 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset="utf-8"><title>Checklist Perbaikan Bahan Kimia</title>
+<style>
+body { font-family: 'Calibri', sans-serif; }
+h1 { color: #2C3E50; text-align: center; font-size: 24pt; }
+h2 { color: #34495E; font-size: 16pt; border-bottom: 1px solid #BDC3C7; padding-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th, td { border: 1px solid #7F8C8D; padding: 8px; text-align: left; }
+th { background-color: #ECF0F1; font-weight: bold; }
+.likert-col { width: 10%; text-align: center; }
+</style>
+</head>
+<body>
+    <h1>CHECKLIST AUDIT & PERBAIKAN BAHAN KIMIA (AHP-FUZZY MODEL)</h1>
+    <p><strong>Fasilitas:</strong> ___________________________ &nbsp;&nbsp;&nbsp; <strong>Tanggal:</strong> _________________</p>
+    
+    <h2>A. Manajemen Penyimpanan Bahan Kimia (Storage)</h2>
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Item Pemeriksaan</th>
+            <th colspan="5">Skala Likert (1=Sangat Buruk, 5=Sangat Baik)</th>
+            <th>Catatan / Tindak Lanjut</th>
+        </tr>
+        <tr><td>1</td><td>Bahan kimia mudah terbakar (flammable) disimpan terpisah dari bahan kimia reaktif/oksidator?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+        <tr><td>2</td><td>Lemari penyimpanan (Chemical Cabinet) memenuhi standar tahan api (Fireproof)?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+        <tr><td>3</td><td>Ruang penyimpanan memiliki retensi tumpahan (Secondary Containment) di lantai?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+    </table>
+
+    <h2>B. Identifikasi & Dokumen Administrasi</h2>
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Item Pemeriksaan</th>
+            <th colspan="5">Skala Likert (1=Sangat Buruk, 5=Sangat Baik)</th>
+            <th>Catatan / Tindak Lanjut</th>
+        </tr>
+        <tr><td>4</td><td>Material Safety Data Sheet (MSDS / LDKB) tersedia dan mudah diakses oleh pekerja?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+        <tr><td>5</td><td>Label bahaya (Simbol NFPA/GHS) terlihat jelas pada semua wadah penyimpanan kimia?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+    </table>
+
+    <h2>C. Sistem Proteksi Spesifik & Exhaust</h2>
+    <table>
+        <tr>
+            <th>No</th>
+            <th>Item Pemeriksaan</th>
+            <th colspan="5">Skala Likert (1=Sangat Buruk, 5=Sangat Baik)</th>
+            <th>Catatan / Tindak Lanjut</th>
+        </tr>
+        <tr><td>6</td><td>Ventilasi pembuangan (Exhaust fan) memiliki motor tipe explosion-proof?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+        <tr><td>7</td><td>Tersedia APAR tipe khusus (Foam/Dry Chemical) di area berisiko kimia tepat guna?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+        <tr><td>8</td><td>Sistem deteksi gas bocor (Gas Detector) beroperasi dan terkalibrasi dengan baik?</td><td class="likert-col">1</td><td class="likert-col">2</td><td class="likert-col">3</td><td class="likert-col">4</td><td class="likert-col">5</td><td></td></tr>
+    </table>
+    <br><hr>
+    <p><em>*Format ini dicetak dari Generasi Sistem Aplikasi Flutter Fire Risk Assessment</em></p>
+</body>
+</html>
