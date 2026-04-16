@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../models/models.dart';
 import '../widgets/widgets.dart';
+import '../services/language_service.dart';
 import 'assessment_screen.dart';
 
 class FactoryInfoScreen extends StatefulWidget {
@@ -113,7 +114,30 @@ class _FactoryInfoScreenState extends State<FactoryInfoScreen>
     return Scaffold(
       backgroundColor: AppTheme.darkBackground,
       appBar: AppBar(
-        title: const Text('Informasi Fasilitas'),
+        title: Text(lang.t('facility_info')),
+        actions: [
+          GestureDetector(
+            onTap: lang.toggle,
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: AppTheme.goldPrimary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppTheme.goldPrimary.withValues(alpha: 0.4)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.language_rounded, color: AppTheme.goldPrimary, size: 14),
+                  const SizedBox(width: 4),
+                  Text(lang.isEn ? '🇮🇩 ID' : '🇬🇧 EN',
+                      style: const TextStyle(color: AppTheme.goldPrimary, fontWeight: FontWeight.bold, fontSize: 11)),
+                ],
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.transparent,
       ),
       body: FadeTransition(

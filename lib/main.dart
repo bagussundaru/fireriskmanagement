@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'screens/main_screen.dart';
 import 'services/supabase_service.dart';
+import 'services/language_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Supabase (optional - will work without it)
   await SupabaseService.initialize();
-  
   runApp(const FireRiskApp());
 }
 
@@ -17,11 +15,15 @@ class FireRiskApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fire Risk Assessment',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme, // It's actually light now
-      home: const MainScreen(),
+    // AnimatedBuilder on the global lang notifier triggers full app rebuild on toggle
+    return AnimatedBuilder(
+      animation: lang,
+      builder: (_, __) => MaterialApp(
+        title: lang.t('app_title'),
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        home: const MainScreen(),
+      ),
     );
   }
 }
