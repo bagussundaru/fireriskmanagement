@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git commit -m 'chore: normalize file permissions and refresh pubspec.lock *)"
+    ]
+  }
+}
